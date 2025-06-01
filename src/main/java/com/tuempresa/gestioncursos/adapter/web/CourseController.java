@@ -2,6 +2,7 @@ package com.tuempresa.gestioncursos.adapter.web;
 
 import com.tuempresa.gestioncursos.domain.model.CourseDto;
 import com.tuempresa.gestioncursos.domain.port.in.CourseUseCase;
+import com.tuempresa.gestioncursos.infrastructure.persistence.mapper.CourseMapper;
 import io.reactivex.rxjava3.core.Observable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,14 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class CourseController {
 
     private final CourseUseCase courseUseCase;
-    //private final CourseMapper courseMapper;
+    private final CourseMapper courseMapper;
 
     @GetMapping
     public Observable<CourseDto> getAllCourses() {
         log.info("Starting getAllCourses in controller");
         return courseUseCase.getAllCourses()
-                .doFinally(() -> log.info("log dentro del observable"))
-                .map(course ->
-                        new CourseDto(course.getName(),course.getCredits()));
+                .map(courseMapper::toDto)
+                .doFinally(() -> log.info("log dentro del observable"));
     }
 }
