@@ -1,7 +1,10 @@
 package com.tuempresa.gestioncursos.adapter.web;
 
 import com.tuempresa.gestioncursos.domain.model.CourseDto;
+import com.tuempresa.gestioncursos.domain.model.CourseDtoResponse;
 import com.tuempresa.gestioncursos.domain.port.in.CourseUseCase;
+import com.tuempresa.gestioncursos.infrastructure.api.PostApi;
+import com.tuempresa.gestioncursos.infrastructure.api.model.Post;
 import com.tuempresa.gestioncursos.infrastructure.persistence.mapper.CourseMapper;
 import io.reactivex.rxjava3.core.Observable;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +23,12 @@ public class CourseController {
     private final CourseMapper courseMapper;
 
     @GetMapping
-    public Observable<CourseDto> getAllCourses() {
+    public Observable<CourseDtoResponse> getAllCourses() {
         log.info("Starting getAllCourses in controller");
         return courseUseCase.getAllCourses()
-                .map(courseMapper::toDto)
+                .map(courseMapper::toDtoResponse)
                 .doFinally(() -> log.info("log dentro del observable"));
     }
+
+
 }
